@@ -1,0 +1,26 @@
+{
+  "name": "outplan",
+  "version": "0.0.1",
+  "description": "A simple A/B testing framework based on PlanOut",
+  "main": "lib/outplan.js",
+  "scripts": {
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cloud9ide/outplan.git"
+  },
+  "keywords": [
+    "a/b testing",
+    "experiments",
+    "planout"
+  ],
+  "author": "Lennart Kats <lennart@c9.io>",
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "^2.3.3"
+  },
+  "dependencies": {
+    "planout": "^2.0.2"
+  }
+}
