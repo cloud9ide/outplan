@@ -5,8 +5,14 @@ OutPlan is an A/B testing framework based on Facebook's [PlanOut](http://faceboo
 It's designed to work with Node and client-side JavaScript.
 
 OutPlan is based on [PlanOut.js](https://github.com/HubSpot/PlanOut.js),
-but provides an alternative, simpler API. It "outclasses" classic PlanOut by
-not using classes.
+but it "outclasses" classic PlanOut by not using classes.
+The resulting API is clean and simple.
+
+## Installation
+
+```
+npm install outplan
+```
 
 ## Usage
 
@@ -42,8 +48,7 @@ var color = variation.button_color;
 var text = variation.button_text;
 ```
 
-OutPlan also supports custom distribution operators
-(see http://facebook.github.io/planout/docs/random-operators.html):
+OutPlan also supports [custom distribution operators](http://facebook.github.io/planout/docs/random-operators.html):
 
 ```
 outplan.create("cute-colors", ["A", "B"], {
