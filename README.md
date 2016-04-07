@@ -39,11 +39,11 @@ OutPlan is deterministic so it will always give you the same
 You can assign complex objects to experiments as well:
 
 ```
-outplan.create("nice-colors", {
+outplan.create("cool-buttons", {
     A: { button_color: "#AAA", button_text: "I voted" },
     B: { button_color: "#BBB", button_text: "I am voter" }
 });
-var variation = outplan.get("nice-colors", userId);
+var variation = outplan.get("cool-buttons", userId);
 var color = variation.button_color;
 var text = variation.button_text;
 ```
@@ -51,9 +51,9 @@ var text = variation.button_text;
 OutPlan also supports [custom distribution operators](http://facebook.github.io/planout/docs/random-operators.html):
 
 ```
-outplan.create("cute-colors", ["A", "B"], {
+outplan.create("letter-experiment", ["A", "B"], {
     operator: outplan.WeightedChoice,
-    weights: [0.5, 0.5],
+    weights: [0.6, 0.4],
 });
 ```
 
