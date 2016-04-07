@@ -82,7 +82,11 @@ describe("outplan", function() {
         outplan.create("foo", ["A", "B"]);
         outplan.get("foo", 42);
         assert.equal(logged.name, "foo");
-        assert.equal(logged.userId, 42);
-        assert.equal(logged.choice, "A");
+        assert.equal(logged.inputs.userId, 42);
+        assert.equal(logged.params.name, "A");
+        assert.equal(logged.params.value, "A");
+        assert.equal(logged.event, "exposure");
+        assert.equal(logged.salt, "salt");
+        assert(logged.time);
     });
 });
