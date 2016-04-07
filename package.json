@@ -21,6 +21,6 @@
     "mocha": "^2.3.3"
   },
   "dependencies": {
-    "planout": "^2.0.2"
+    "planout": "~2.0.2"
   }
 }
