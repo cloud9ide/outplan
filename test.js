@@ -54,17 +54,17 @@ describe("outplan", function() {
         assert.equal(outplan.get("foo", "9"), "A");
     });
     
-    it("can get values for experiments", function() {
-        outplan.create("foo", { A: { color: "#AAA" }, B: { color: "#BBB" } });
+    it("supports complex choice objects", function() {
+        outplan.create("foo", [{ name: "A", color: "#AAA" }, { name: "B", color: "#BBB" }]);
         var value = outplan.get("foo", 1);
         assert.equal(value.color, "#BBB");
     });
     
     it("can run some example code", function() {
-        outplan.create("nice-colors", {
-            A: { button_color: "#AAA", button_text: "I voted" },
-            B: { button_color: "#BBB", button_text: "I am voter" }
-        });
+        outplan.create("nice-colors", [
+            { name: "A", button_color: "#AAA", button_text: "I voted" },
+            { name: "B", button_color: "#BBB", button_text: "I am voter" }
+        ]);
         var variation = outplan.get("nice-colors", 42);
         var color = variation.button_color;
         var text = variation.button_text;

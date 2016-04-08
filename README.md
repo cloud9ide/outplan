@@ -39,10 +39,10 @@ OutPlan is deterministic so it will always give you the same
 You can assign complex objects to experiments as well:
 
 ```javascript
-outplan.create("cool-buttons", {
-    A: { button_color: "#AAA", button_text: "I voted" },
-    B: { button_color: "#BBB", button_text: "I am voter" }
-});
+outplan.create("cool-buttons", [
+    { name: "A", button_color: "#AAA", button_text: "I voted" },
+    { name: "B", button_color: "#BBB", button_text: "I am voter" }
+]);
 var variation = outplan.get("cool-buttons", userId);
 var color = variation.button_color;
 var text = variation.button_text;
