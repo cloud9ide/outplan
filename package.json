@@ -1,10 +1,12 @@
 {
   "name": "outplan",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A simple A/B testing framework based on PlanOut",
   "main": "lib/outplan.js",
   "scripts": {
-    "test": "mocha test"
+    "test": "mocha test",
+    "browserify": "mkdir -p dist; node_modules/browserify/bin/cmd.js -s outplan lib/outplan.js -o dist/outplan.js",
+    "prepublish": "npm run browserify"
   },
   "repository": {
     "type": "git",
@@ -13,12 +15,22 @@
   "keywords": [
     "a/b testing",
     "experiments",
-    "planout"
+    "planout",
+    "multivariate testing",
+    "experiment design",
+    "ab testing",
+    "ab",
+    "split testing"
   ],
   "author": "Lennart Kats <lennart@c9.io>",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cloud9ide/planout/issues"
+  },
+  "homepage": "https://github.com/cloud9ide/planout#readme",
   "devDependencies": {
-    "mocha": "^2.3.3"
+    "mocha": "^2.3.3",
+    "browserify": "^12.0.1"
   },
   "dependencies": {
     "planout": "~2.0.2"
