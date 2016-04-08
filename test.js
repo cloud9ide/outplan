@@ -8,6 +8,7 @@ describe("outplan", function() {
         outplan.configure({
             logFunction: function() {},
             experiments: [],
+            compatibleHash: false,
         });
     });
     
@@ -39,18 +40,18 @@ describe("outplan", function() {
     it("deterministically gets values", function() {
         outplan.create("foo", ["A", "B"]);
         assert.equal(outplan.get("foo", 1), "B");
-        assert.equal(outplan.get("foo", 2), "A");
-        assert.equal(outplan.get("foo", 3), "B");
-        assert.equal(outplan.get("foo", 4), "A");
+        assert.equal(outplan.get("foo", 2), "B");
+        assert.equal(outplan.get("foo", 3), "A");
+        assert.equal(outplan.get("foo", 4), "B");
         assert.equal(outplan.get("foo", "1"), "B");
-        assert.equal(outplan.get("foo", "2"), "A");
-        assert.equal(outplan.get("foo", "3"), "B");
-        assert.equal(outplan.get("foo", "4"), "A");
-        assert.equal(outplan.get("foo", "5"), "A");
+        assert.equal(outplan.get("foo", "2"), "B");
+        assert.equal(outplan.get("foo", "3"), "A");
+        assert.equal(outplan.get("foo", "4"), "B");
+        assert.equal(outplan.get("foo", "5"), "B");
         assert.equal(outplan.get("foo", "6"), "A");
         assert.equal(outplan.get("foo", "7"), "A");
         assert.equal(outplan.get("foo", "8"), "B");
-        assert.equal(outplan.get("foo", "9"), "B");
+        assert.equal(outplan.get("foo", "9"), "A");
     });
     
     it("can get values for experiments", function() {
@@ -68,8 +69,8 @@ describe("outplan", function() {
         var color = variation.button_color;
         var text = variation.button_text;
         
-        assert.equal(color, "#AAA");
-        assert.equal(text, "I voted");
+        assert.equal(color, "#BBB");
+        assert.equal(text, "I am voter");
     });
     
     it("supports logging", function() {
@@ -83,10 +84,29 @@ describe("outplan", function() {
         outplan.get("foo", 42);
         assert.equal(logged.name, "foo");
         assert.equal(logged.inputs.userId, 42);
-        assert.equal(logged.params.name, "A");
-        assert.equal(logged.params.value, "A");
+        assert.equal(logged.params.name, "B");
+        assert.equal(logged.params.value, "B");
         assert.equal(logged.event, "exposure");
         assert.equal(logged.salt, "salt");
         assert(logged.time);
+    });
+    
+    it("supports compatibleHash", function() {
+        outplan.create("foo", ["A", "B"]);
+        assert.equal(outplan.get("foo", 99), "A");
+        outplan.configure({ compatibleHash: true });
+        assert.equal(outplan.get("foo", 99), "B");
+    });
+    
+    it("supports a falsy userId", function() {
+        outplan.create("foo", ["A", "B"]);
+        assert.equal(outplan.get("foo", 0), "B");
+    });
+    
+    it("supports uses the experiment name for determinism", function() {
+        outplan.create("foo", ["A", "B"]);
+        outplan.create("bar", ["A", "B"]);
+        assert.equal(outplan.get("foo", 42), "B");
+        assert.equal(outplan.get("bar", 42), "A");
     });
 });
