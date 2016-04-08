@@ -103,6 +103,11 @@ describe("outplan", function() {
         assert.equal(outplan.get("foo", 0), "B");
     });
     
+    it("supports a string userId", function() {
+        outplan.create("foo", ["A", "B"]);
+        assert.equal(outplan.get("foo", "usertje"), "A");
+    });
+    
     it("supports uses the experiment name for determinism", function() {
         outplan.create("foo", ["A", "B"]);
         outplan.create("bar", ["A", "B"]);
