@@ -57,7 +57,7 @@ outplan.create("letter-experiment", ["A", "B"], {
 });
 ```
 
-## Logging
+### Logging
 
 You can set an event logger using 
 
@@ -84,7 +84,7 @@ where `e` is an object like
 }
 ```
 
-Below is an example implementation. It logs events like "cool-buttons - exposure"
+Below is an example implementation. It logs events like `"cool-buttons - exposure"`
 to some popular analytics services.
 
 ```javascript
@@ -96,6 +96,9 @@ function log(e) {
   
     // For Amplitude
     amplitude.logEvent(label, { variation: e.params.name });
+    
+    // For Heap Analytics
+    heap.track(label, { variation: e.params.name });
 
     // For Google Analytics
     ga("send", "event", "EXPERIMENT", label, e.params.name);
