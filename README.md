@@ -22,11 +22,11 @@ Set up an experiment as follows:
 outplan.create("nice-colors", ["A", "B"]);
 ```
 
-and then evaluate the experiment using `outplan.get()`:
+and then evaluate the experiment using `outplan.expose()`:
 
 ```javascript
 var userId = 42; // something unique to the current user
-if (outplan.get("nice-colors", userId) === "A") {
+if (outplan.expose("nice-colors", userId) === "A") {
     // Use "A" color variation
 } else {
     // Use "B" color variation
@@ -43,7 +43,7 @@ outplan.create("cool-buttons", [
     { name: "A", button_color: "#AAA", button_text: "I voted" },
     { name: "B", button_color: "#BBB", button_text: "I am voter" }
 ]);
-var variation = outplan.get("cool-buttons", userId);
+var variation = outplan.expose("cool-buttons", userId);
 var color = variation.button_color;
 var text = variation.button_text;
 ```

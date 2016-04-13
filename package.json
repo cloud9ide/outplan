@@ -1,6 +1,6 @@
 {
   "name": "outplan",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A simple A/B testing framework based on PlanOut",
   "main": "lib/outplan.js",
   "scripts": {
