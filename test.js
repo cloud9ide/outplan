@@ -82,6 +82,7 @@ describe("outplan", function() {
         });
         outplan.create("foo", ["A", "B"]);
         outplan.expose("foo", 42);
+        assert(logged, "Needs to log exposures");
         assert.equal(logged.name, "foo");
         assert.equal(logged.inputs.userId, 42);
         assert.equal(logged.params.name, "B");
