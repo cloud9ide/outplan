@@ -129,4 +129,20 @@ describe("outplan", function() {
         assert.equal(outplan.expose("foo", 42), "B");
         assert.equal(outplan.expose("bar", 42), "A");
     });
+    
+    it("using create multiple times doesn't affect determinism", function() {
+        outplan.create("foo", ["A", "B"]);
+        outplan.create("bar", ["A", "B"]);
+        outplan.create("foo", ["A", "B"]);
+        outplan.create("bar", ["A", "B"]);
+        assert.equal(outplan.expose("foo", 42), "B");
+        assert.equal(outplan.expose("bar", 42), "A");
+    });
+    
+    it("supports chaining API", function() {
+        var variation = outplan
+            .create("foo", ["A", "B"])
+            .expose(42);
+        assert.equal(variation, "B");
+    });
 });
