@@ -57,9 +57,9 @@ outplan.create("letter-experiment", ["A", "B"], {
 });
 ```
 
-OutPlan is doesn't use SHA1 and BigNumbers by default in order to keep a light
-footprint, particularly when used in the client. To use the full SHA1
-implementation for deterministic hashes as used by PlanOut, use the following:
+OutPlan uses MD5 for hashing. The underlying Planout.js library can also
+use SHA1, but it's a bit more heavy-weight for client-side applications.
+If you want to use SHA1, try the following:
 
 ```
 var outplan = require("outplan/dist/outplan_full");

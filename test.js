@@ -1,10 +1,10 @@
 var outplanFull = require("./dist/outplan_full");
-var outplanLite = require("./dist/outplan");
+var outplan = require("./dist/outplan");
 var assert = require("assert");
 
 function testBoth(test) {
     test(outplanFull);
-    test(outplanLite);
+    test(outplan);
 }
 
 describe("outplan", function() {
@@ -71,20 +71,20 @@ describe("outplan", function() {
     });
     
     it("deterministically gets values in lite version", function() {
-        outplanLite.create("foo", ["A", "B"]);
-        assert.equal(outplanLite.expose("foo", 1), "A");
-        assert.equal(outplanLite.expose("foo", 2), "B");
-        assert.equal(outplanLite.expose("foo", 3), "A");
-        assert.equal(outplanLite.expose("foo", 4), "B");
-        assert.equal(outplanLite.expose("foo", "1"), "A");
-        assert.equal(outplanLite.expose("foo", "2"), "B");
-        assert.equal(outplanLite.expose("foo", "3"), "A");
-        assert.equal(outplanLite.expose("foo", "4"), "B");
-        assert.equal(outplanLite.expose("foo", "5"), "A");
-        assert.equal(outplanLite.expose("foo", "6"), "B");
-        assert.equal(outplanLite.expose("foo", "7"), "A");
-        assert.equal(outplanLite.expose("foo", "8"), "B");
-        assert.equal(outplanLite.expose("foo", "9"), "A");
+        outplan.create("foo", ["A", "B"]);
+        assert.equal(outplan.expose("foo", 1), "A");
+        assert.equal(outplan.expose("foo", 2), "B");
+        assert.equal(outplan.expose("foo", 3), "A");
+        assert.equal(outplan.expose("foo", 4), "B");
+        assert.equal(outplan.expose("foo", "1"), "A");
+        assert.equal(outplan.expose("foo", "2"), "B");
+        assert.equal(outplan.expose("foo", "3"), "A");
+        assert.equal(outplan.expose("foo", "4"), "B");
+        assert.equal(outplan.expose("foo", "5"), "A");
+        assert.equal(outplan.expose("foo", "6"), "A");
+        assert.equal(outplan.expose("foo", "7"), "B");
+        assert.equal(outplan.expose("foo", "8"), "B");
+        assert.equal(outplan.expose("foo", "9"), "B");
     });
     
     it("supports complex choice objects", function() {
@@ -95,39 +95,35 @@ describe("outplan", function() {
     });
     
     it("can run some example code", function() {
-        testBoth(function(outplan) {
-            outplan.create("nice-colors", [
-                { name: "A", button_color: "#AAA", button_text: "I voted" },
-                { name: "B", button_color: "#BBB", button_text: "I am voter" }
-            ]);
-            var variation = outplan.expose("nice-colors", 42);
-            var color = variation.button_color;
-            var text = variation.button_text;
-            
-            assert.equal(color, "#BBB");
-            assert.equal(text, "I am voter");
-        });
+        outplan.create("nice-colors", [
+            { name: "A", button_color: "#AAA", button_text: "I voted" },
+            { name: "B", button_color: "#BBB", button_text: "I am voter" }
+        ]);
+        var variation = outplan.expose("nice-colors", 42);
+        var color = variation.button_color;
+        var text = variation.button_text;
+        
+        assert.equal(color, "#AAA");
+        assert.equal(text, "I voted");
     });
     
     it("supports logging", function() {
-        testBoth(function(outplan) {
-            var logged;
-            outplan.configure({
-                logFunction: function(e) {
-                    logged = e;
-                }
-            });
-            outplan.create("foo", ["A", "B"]);
-            outplan.expose("foo", 42);
-            assert(logged, "Needs to log exposures");
-            assert.equal(logged.name, "foo");
-            assert.equal(logged.inputs.userId, 42);
-            assert.equal(logged.params.name, "B");
-            assert.equal(logged.params.value, "B");
-            assert.equal(logged.event, "exposure");
-            assert.equal(logged.salt, "salt");
-            assert(logged.time);
+        var logged;
+        outplanFull.configure({
+            logFunction: function(e) {
+                logged = e;
+            }
         });
+        outplanFull.create("foo", ["A", "B"]);
+        outplanFull.expose("foo", 42);
+        assert(logged, "Needs to log exposures");
+        assert.equal(logged.name, "foo");
+        assert.equal(logged.inputs.userId, 42);
+        assert.equal(logged.params.name, "B");
+        assert.equal(logged.params.value, "B");
+        assert.equal(logged.event, "exposure");
+        assert.equal(logged.salt, "salt");
+        assert(logged.time);
     });
     
     it("doesn't log when using { log: false }", function() {
@@ -155,7 +151,7 @@ describe("outplan", function() {
     
     it("doesn't support compatibleHash with regular outplan", function() {
         try {
-            outplanLite.configure({ compatibleHash: true });
+            outplan.configure({ compatibleHash: true });
         } catch (e) {
             return;
         }
@@ -182,22 +178,26 @@ describe("outplan", function() {
     });
     
     it("using create multiple times doesn't affect determinism", function() {
-        testBoth(function(outplan) {
-            outplan.create("foo", ["A", "B"]);
-            outplan.create("bar", ["A", "B"]);
-            outplan.create("foo", ["A", "B"]);
-            outplan.create("bar", ["A", "B"]);
-            assert.equal(outplan.expose("foo", 42), "B");
-            assert.equal(outplan.expose("bar", 42), "A");
-        });
+        outplanFull.create("foo", ["A", "B"]);
+        outplanFull.create("bar", ["A", "B"]);
+        outplanFull.create("foo", ["A", "B"]);
+        outplanFull.create("bar", ["A", "B"]);
+        assert.equal(outplanFull.expose("foo", 42), "B");
+        assert.equal(outplanFull.expose("bar", 42), "A");
+
+        outplan.create("foo", ["A", "B"]);
+        outplan.create("bar", ["A", "B"]);
+        outplan.create("foo", ["A", "B"]);
+        outplan.create("bar", ["A", "B"]);
+        assert.equal(outplan.expose("foo", 42), "A");
+        assert.equal(outplan.expose("bar", 42), "A");
+
     });
     
     it("supports chaining API", function() {
-        testBoth(function(outplan) {
-            var variation = outplan
-                .create("foo", ["A", "B"])
-                .expose(42);
-            assert.equal(variation, "B");
-        });
+        var variation = outplan
+            .create("foo", ["A", "B"])
+            .expose(42);
+        assert.equal(variation, "A");
     });
 });
