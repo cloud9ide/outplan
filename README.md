@@ -106,6 +106,19 @@ function log(e) {
 outplan.configure({ logFunction: log });
 ```
 
+## Hashing Algorithm
+
+OutPlan uses MD5 for hashing. The underlying Planout.js library can also
+use SHA1, but it's a bit more heavy-weight for client-side applications.
+If you want to use SHA1, try the following:
+
+```javascript
+var outplan = require("outplan/dist/outplan_full");
+
+// For compatibility with non-JS implementations of PlanOut (even slower):
+outplan.configure({ compatibleHash: true });
+```
+
 # License
 
 MIT

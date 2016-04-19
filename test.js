@@ -1,60 +1,94 @@
+var outplanFull = require("./dist/outplan_full");
 var outplan = require("./dist/outplan");
 var assert = require("assert");
+
+function testBoth(test) {
+    test(outplanFull);
+    test(outplan);
+}
 
 describe("outplan", function() {
     this.timeout(15000);
     
     beforeEach(function() {
-        outplan.configure({
-            logFunction: function() {},
-            experiments: [],
-            compatibleHash: false,
+        testBoth(function(outplan) {
+            outplan.configure({
+                logFunction: function() {},
+                experiments: [],
+                compatibleHash: false,
+            });
         });
     });
     
     it("can create simple experiments", function() {
-        outplan.create("foo", ["A", "B"]);
-        assert.equal(Object.keys(outplan.getExperiments()).length, 1);
+        testBoth(function(outplan) {
+            outplan.create("foo", ["A", "B"]);
+            assert.equal(Object.keys(outplan.getExperiments()).length, 1);
+        });
     });
     
     it("can create simple experiments with a custom distribution operator", function() {
-        outplan.create("foo", ["A", "B"], {
-            operator: outplan.WeightedChoice,
-            weights: [0.5, 0.5],
+        testBoth(function(outplan) {
+            outplan.create("foo", ["A", "B"], {
+                operator: outplan.WeightedChoice,
+                weights: [0.5, 0.5],
+            });
+            assert.equal(Object.keys(outplan.getExperiments()).length, 1);
         });
-        assert.equal(Object.keys(outplan.getExperiments()).length, 1);
     });
     
     it("can create multiple experiments", function() {
-        outplan.create("foo", ["A", "B"]);
-        outplan.create("bar", ["C", "D"]);
-        assert.equal(Object.keys(outplan.getExperiments()).length, 2);
+        testBoth(function(outplan) {
+            outplan.create("foo", ["A", "B"]);
+            outplan.create("bar", ["C", "D"]);
+            assert.equal(Object.keys(outplan.getExperiments()).length, 2);
+        });
     });
     
     it("can get values for experiments", function() {
-        outplan.create("foo", ["A", "B"]);
-        var value = outplan.expose("foo", 1);
-        assert(value === "A" || value === "B", value);
+        testBoth(function(outplan) {
+            outplan.create("foo", ["A", "B"]);
+            var value = outplan.expose("foo", 1);
+            assert(value === "A" || value === "B", value);
+        });
     });
     
-    it("deterministically gets values", function() {
+    it("deterministically gets values in outplan_full", function() {
+        outplanFull.create("foo", ["A", "B"]);
+        assert.equal(outplanFull.expose("foo", 1), "B");
+        assert.equal(outplanFull.expose("foo", 2), "B");
+        assert.equal(outplanFull.expose("foo", 3), "A");
+        assert.equal(outplanFull.expose("foo", 4), "B");
+        assert.equal(outplanFull.expose("foo", "1"), "B");
+        assert.equal(outplanFull.expose("foo", "2"), "B");
+        assert.equal(outplanFull.expose("foo", "3"), "A");
+        assert.equal(outplanFull.expose("foo", "4"), "B");
+        assert.equal(outplanFull.expose("foo", "5"), "B");
+        assert.equal(outplanFull.expose("foo", "6"), "A");
+        assert.equal(outplanFull.expose("foo", "7"), "A");
+        assert.equal(outplanFull.expose("foo", "8"), "B");
+        assert.equal(outplanFull.expose("foo", "9"), "A");
+    });
+    
+    it("deterministically gets values in lite version", function() {
         outplan.create("foo", ["A", "B"]);
-        assert.equal(outplan.expose("foo", 1), "B");
+        assert.equal(outplan.expose("foo", 1), "A");
         assert.equal(outplan.expose("foo", 2), "B");
         assert.equal(outplan.expose("foo", 3), "A");
         assert.equal(outplan.expose("foo", 4), "B");
-        assert.equal(outplan.expose("foo", "1"), "B");
+        assert.equal(outplan.expose("foo", "1"), "A");
         assert.equal(outplan.expose("foo", "2"), "B");
         assert.equal(outplan.expose("foo", "3"), "A");
         assert.equal(outplan.expose("foo", "4"), "B");
-        assert.equal(outplan.expose("foo", "5"), "B");
+        assert.equal(outplan.expose("foo", "5"), "A");
         assert.equal(outplan.expose("foo", "6"), "A");
-        assert.equal(outplan.expose("foo", "7"), "A");
+        assert.equal(outplan.expose("foo", "7"), "B");
         assert.equal(outplan.expose("foo", "8"), "B");
-        assert.equal(outplan.expose("foo", "9"), "A");
+        assert.equal(outplan.expose("foo", "9"), "B");
     });
     
     it("supports complex choice objects", function() {
+        var outplan = outplanFull;
         outplan.create("foo", [{ name: "A", color: "#AAA" }, { name: "B", color: "#BBB" }]);
         var value = outplan.expose("foo", 1);
         assert.equal(value.color, "#BBB");
@@ -69,19 +103,19 @@ describe("outplan", function() {
         var color = variation.button_color;
         var text = variation.button_text;
         
-        assert.equal(color, "#BBB");
-        assert.equal(text, "I am voter");
+        assert.equal(color, "#AAA");
+        assert.equal(text, "I voted");
     });
     
     it("supports logging", function() {
         var logged;
-        outplan.configure({
+        outplanFull.configure({
             logFunction: function(e) {
                 logged = e;
             }
         });
-        outplan.create("foo", ["A", "B"]);
-        outplan.expose("foo", 42);
+        outplanFull.create("foo", ["A", "B"]);
+        outplanFull.expose("foo", 42);
         assert(logged, "Needs to log exposures");
         assert.equal(logged.name, "foo");
         assert.equal(logged.inputs.userId, 42);
@@ -93,56 +127,77 @@ describe("outplan", function() {
     });
     
     it("doesn't log when using { log: false }", function() {
-        var logged;
-        outplan.configure({
-            logFunction: function(e) {
-                logged = e;
-            }
+        testBoth(function(outplan) {
+            var logged;
+            outplan.configure({
+                logFunction: function(e) {
+                    logged = e;
+                }
+            });
+            outplan.create("foo", ["A", "B"]);
+            outplan.expose("foo", 42, { log: false });
+            assert(!logged);
+            outplan.expose("foo", 42, { log: true });
+            assert(logged);
         });
-        outplan.create("foo", ["A", "B"]);
-        outplan.expose("foo", 42, { log: false });
-        assert(!logged);
-        outplan.expose("foo", 42, { log: true });
-        assert(logged);
     });
     
-    it("supports compatibleHash", function() {
-        outplan.create("foo", ["A", "B"]);
-        assert.equal(outplan.expose("foo", 99), "A");
-        outplan.configure({ compatibleHash: true });
-        assert.equal(outplan.expose("foo", 99), "B");
+    it("supports compatibleHash in outplan_full", function() {
+        outplanFull.create("foo", ["A", "B"]);
+        assert.equal(outplanFull.expose("foo", 99), "A");
+        outplanFull.configure({ compatibleHash: true });
+        assert.equal(outplanFull.expose("foo", 99), "B");
+    });
+    
+    it("doesn't support compatibleHash with regular outplan", function() {
+        try {
+            outplan.configure({ compatibleHash: true });
+        } catch (e) {
+            return;
+        }
+        assert(false, "Exception expected");
     });
     
     it("supports a falsy userId", function() {
-        outplan.create("foo", ["A", "B"]);
-        assert.equal(outplan.expose("foo", 0), "B");
+        testBoth(function(outplan) {
+            outplan.create("foo", ["A", "B"]);
+            assert.equal(outplan.expose("foo", 0), "B");
+        });
     });
     
     it("supports a string userId", function() {
-        outplan.create("foo", ["A", "B"]);
-        assert.equal(outplan.expose("foo", "usertje"), "A");
+        outplanFull.create("foo", ["A", "B"]);
+        assert.equal(outplanFull.expose("foo", "usertje"), "A");
     });
     
     it("supports uses the experiment name for determinism", function() {
-        outplan.create("foo", ["A", "B"]);
-        outplan.create("bar", ["A", "B"]);
-        assert.equal(outplan.expose("foo", 42), "B");
-        assert.equal(outplan.expose("bar", 42), "A");
+        outplanFull.create("foo", ["A", "B"]);
+        outplanFull.create("bar", ["A", "B"]);
+        assert.equal(outplanFull.expose("foo", 42), "B");
+        assert.equal(outplanFull.expose("bar", 42), "A");
     });
     
     it("using create multiple times doesn't affect determinism", function() {
+        outplanFull.create("foo", ["A", "B"]);
+        outplanFull.create("bar", ["A", "B"]);
+        outplanFull.create("foo", ["A", "B"]);
+        outplanFull.create("bar", ["A", "B"]);
+        assert.equal(outplanFull.expose("foo", 42), "B");
+        assert.equal(outplanFull.expose("bar", 42), "A");
+
         outplan.create("foo", ["A", "B"]);
         outplan.create("bar", ["A", "B"]);
         outplan.create("foo", ["A", "B"]);
         outplan.create("bar", ["A", "B"]);
-        assert.equal(outplan.expose("foo", 42), "B");
+        assert.equal(outplan.expose("foo", 42), "A");
         assert.equal(outplan.expose("bar", 42), "A");
+
     });
     
     it("supports chaining API", function() {
         var variation = outplan
             .create("foo", ["A", "B"])
             .expose(42);
-        assert.equal(variation, "B");
+        assert.equal(variation, "A");
     });
 });
