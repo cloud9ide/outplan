@@ -57,6 +57,18 @@ outplan.create("letter-experiment", ["A", "B"], {
 });
 ```
 
+OutPlan is doesn't use SHA1 and BigNumbers by default in order to keep a light
+footprint, particularly when used in the client. To use the full SHA1
+implementation for deterministic hashes as used by PlanOut, use the following:
+
+```
+var outplan = require("outplan/dist/outplan_full");
+
+// optionally, use BigNumber for hashes compatible with non-JS implementations
+outplan.configure({ compatibleHash: true });
+```
+
+
 ### Logging
 
 You can set an event logger using 
