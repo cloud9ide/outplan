@@ -1,6 +1,6 @@
 {
   "name": "outplan",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A simple A/B testing framework based on PlanOut",
   "main": "dist/outplan.js",
   "scripts": {
@@ -34,9 +34,11 @@
     "babel-plugin-add-module-exports": "^0.1.2",
     "babel-preset-es2015": "^6.6.0",
     "mocha": "^2.3.3",
-    "webpack": "^1.13.0",
+    "webpack": "^1.13.0"
+  },
+  "dependencies": {
+    "md5": "^2.1.0",
     "planout": "~2.0.2",
-    "sha1": "^1.1.0",
-    "md5": "^2.1.0"
+    "sha1": "^1.1.1"
   }
 }
