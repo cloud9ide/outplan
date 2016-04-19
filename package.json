@@ -5,8 +5,8 @@
   "main": "lib/outplan.js",
   "scripts": {
     "test": "mocha test",
-    "browserify": "mkdir -p dist; node_modules/browserify/bin/cmd.js -s outplan lib/outplan.js -o dist/outplan.js",
-    "prepublish": "npm run browserify"
+    "webpack": "node_modules/webpack/bin/webpack.js --display-modules",
+    "prepublish": "npm run webpack"
   },
   "repository": {
     "type": "git",
@@ -29,8 +29,11 @@
   },
   "homepage": "https://github.com/cloud9ide/planout#readme",
   "devDependencies": {
+    "babel-loader": "^6.2.4",
+    "babel-plugin-add-module-exports": "^0.1.2",
+    "babel-preset-es2015": "^6.6.0",
     "mocha": "^2.3.3",
-    "browserify": "^12.0.1"
+    "webpack": "^1.13.0"
   },
   "dependencies": {
     "planout": "~2.0.2"

@@ -1,4 +1,4 @@
-var outplan = require("./lib/outplan");
+var outplan = require("./dist/outplan");
 var assert = require("assert");
 
 describe("outplan", function() {
