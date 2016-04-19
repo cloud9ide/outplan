@@ -1,8 +1,8 @@
 {
   "name": "outplan",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "A simple A/B testing framework based on PlanOut",
-  "main": "lib/outplan.js",
+  "main": "dist/outplan.js",
   "scripts": {
     "test": "mocha test",
     "webpack": "node_modules/webpack/bin/webpack.js --display-modules",
@@ -36,6 +36,7 @@
     "webpack": "^1.13.0"
   },
   "dependencies": {
-    "planout": "~2.0.2"
+    "planout": "~2.0.2",
+    "sha1": "^1.1.1"
   }
 }

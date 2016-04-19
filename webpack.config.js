@@ -5,12 +5,6 @@ module.exports = {
         filename: "dist/outplan.js",
         libraryTarget: "umd",
     },
-    externals: {
-        "crypto": {},
-        "sha1": "sha1",
-        "bignumber.js": "bignumber.js",
-        "planout/es6/interpreter.js": "bignumber.js",
-    },
     module: {
         loaders: [
             {
