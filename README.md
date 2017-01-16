@@ -14,6 +14,9 @@ PlanOut by not using classes. The resulting API is clean and simple.
 npm install outplan
 ```
 
+In the client, jsonm works well with webpack or browserify.
+Our npm distribution also includes a prepackaged client-side version in dist/outplan.js.
+
 ## Usage
 
 Set up an experiment as follows:
