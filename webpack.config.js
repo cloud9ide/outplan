@@ -15,7 +15,7 @@ module.exports = [
                     query: {
                         presets: ["es2015"],
                         // Maintain compatibility with imports in planout (stackoverflow.com/questions/33505992/babel-6-changes-how-it-exports-default)
-                        plugins: ["add-module-exports"],
+                        plugins: ["add-module-exports", "transform-flow-strip-types"],
                     }
                 }
             ]
