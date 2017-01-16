@@ -4,10 +4,10 @@
   "description": "A simple A/B testing framework based on PlanOut",
   "main": "dist/outplan.js",
   "scripts": {
-    "test": "mocha test --compilers js:babel-core/register",
+    "test": "mocha test",
     "webpack": "flow-copy-source lib dist && webpack",
     "flow-check": "flow check",
-    "prepublish": "npm run flow-check && npm run test && npm run webpack"
+    "prepublish": "npm run flow-check && npm run webpack && npm run test"
   },
   "repository": {
     "type": "git",

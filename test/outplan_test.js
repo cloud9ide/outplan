@@ -1,6 +1,6 @@
-let outplanFull = require("./dist/outplan_full");
-let outplan = require("./dist/outplan");
-let assert = require("assert");
+const outplanFull = require("../dist/outplan_full");
+const outplan = require("../dist/outplan");
+const assert = require("assert");
 
 function testBoth(test) {
     test(outplanFull);
@@ -199,5 +199,16 @@ describe("outplan", function() {
             .create("foo", ["A", "B"])
             .expose(42);
         assert.equal(variation, "A");
+    });
+    
+    it("supports custom salts", function() {
+        outplan.create("foo", ["A", "B"]);
+        assert.equal(outplan.expose("foo", 1), "B");
+        assert.equal(outplan.expose("foo", 2), "B");
+        assert.equal(outplan.expose("foo", 3), "A");
+        outplan.configure({ salt: "foobar" });
+        assert.equal(outplan.expose("foo", 1), "B");
+        assert.equal(outplan.expose("foo", 2), "B");
+        assert.equal(outplan.expose("foo", 3), "A");
     });
 });
