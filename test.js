@@ -1,6 +1,6 @@
-var outplanFull = require("./dist/outplan_full");
-var outplan = require("./dist/outplan");
-var assert = require("assert");
+let outplanFull = require("./dist/outplan_full");
+let outplan = require("./dist/outplan");
+let assert = require("assert");
 
 function testBoth(test) {
     test(outplanFull);
@@ -48,7 +48,7 @@ describe("outplan", function() {
     it("can get values for experiments", function() {
         testBoth(function(outplan) {
             outplan.create("foo", ["A", "B"]);
-            var value = outplan.expose("foo", 1);
+            let value = outplan.expose("foo", 1);
             assert(value === "A" || value === "B", value);
         });
     });
@@ -88,9 +88,9 @@ describe("outplan", function() {
     });
     
     it("supports complex choice objects", function() {
-        var outplan = outplanFull;
+        let outplan = outplanFull;
         outplan.create("foo", [{ name: "A", color: "#AAA" }, { name: "B", color: "#BBB" }]);
-        var value = outplan.expose("foo", 1);
+        let value = outplan.expose("foo", 1);
         assert.equal(value.color, "#BBB");
     });
     
@@ -99,16 +99,16 @@ describe("outplan", function() {
             { name: "A", button_color: "#AAA", button_text: "I voted" },
             { name: "B", button_color: "#BBB", button_text: "I am voter" }
         ]);
-        var variation = outplan.expose("nice-colors", 42);
-        var color = variation.button_color;
-        var text = variation.button_text;
+        let variation = outplan.expose("nice-colors", 42);
+        let color = variation.button_color;
+        let text = variation.button_text;
         
         assert.equal(color, "#AAA");
         assert.equal(text, "I voted");
     });
     
     it("supports logging", function() {
-        var logged;
+        let logged;
         outplanFull.configure({
             logFunction: function(e) {
                 logged = e;
@@ -128,7 +128,7 @@ describe("outplan", function() {
     
     it("doesn't log when using { log: false }", function() {
         testBoth(function(outplan) {
-            var logged;
+            let logged;
             outplan.configure({
                 logFunction: function(e) {
                     logged = e;
@@ -195,7 +195,7 @@ describe("outplan", function() {
     });
     
     it("supports chaining API", function() {
-        var variation = outplan
+        let variation = outplan
             .create("foo", ["A", "B"])
             .expose(42);
         assert.equal(variation, "A");

@@ -4,7 +4,7 @@
   "description": "A simple A/B testing framework based on PlanOut",
   "main": "dist/outplan.js",
   "scripts": {
-    "test": "mocha test",
+    "test": "mocha test --compilers js:babel-core/register",
     "webpack": "webpack --display-modules",
     "flow-check": "flow check",
     "prepublish": "npm run flow-check && npm run test && npm run webpack"
