@@ -5,7 +5,7 @@
   "main": "dist/outplan.js",
   "scripts": {
     "test": "mocha test --compilers js:babel-core/register",
-    "webpack": "webpack --display-modules",
+    "webpack": "webpack",
     "flow-check": "flow check",
     "prepublish": "npm run flow-check && npm run test && npm run webpack"
   },
@@ -41,6 +41,7 @@
     "webpack": "^1.13.0"
   },
   "dependencies": {
+    "flow-copy-source": "^1.1.0",
     "md5": "^2.1.0",
     "planout": "~2.0.2",
     "sha1": "^1.1.1"

@@ -9,12 +9,19 @@ module.exports = [
         module: {
             loaders: [
                 {
-                    loader: "babel-loader",
+                    loader: "babel",
                     test: /planout/,
                     exclude: /planout\/node_modules/,
                     query: {
                         presets: ["es2015"],
-                        // Maintain compatibility with imports in planout (stackoverflow.com/questions/33505992/babel-6-changes-how-it-exports-default)
+                        plugins: ["add-module-exports"],
+                    }
+                },
+                {
+                    loader: "babel",
+                    test: /outplan\/lib/,
+                    query: {
+                        presets: ["es2015"],
                         plugins: ["add-module-exports", "transform-flow-strip-types"],
                     }
                 }
@@ -37,13 +44,20 @@ module.exports = [
         module: {
             loaders: [
                 {
-                    loader: "babel-loader",
+                    loader: "babel",
                     test: /planout/,
                     exclude: /planout\/node_modules/,
                     query: {
                         presets: ["es2015"],
-                        // Maintain compatibility with imports in planout (stackoverflow.com/questions/33505992/babel-6-changes-how-it-exports-default)
                         plugins: ["add-module-exports"],
+                    }
+                },
+                {
+                    loader: "babel",
+                    test: /outplan\/lib/,
+                    query: {
+                        presets: ["es2015"],
+                        plugins: ["add-module-exports", "transform-flow-strip-types"],
                     }
                 }
             ]
