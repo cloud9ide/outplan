@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha test",
     "webpack": "node_modules/webpack/bin/webpack.js --display-modules",
-    "prepublish": "npm run webpack"
+    "prepublish": "npm run test && npm run webpack"
   },
   "repository": {
     "type": "git",
