@@ -5,7 +5,7 @@
   "main": "dist/outplan.js",
   "scripts": {
     "test": "mocha test --compilers js:babel-core/register",
-    "webpack": "webpack",
+    "webpack": "flow-copy-source lib dist && webpack",
     "flow-check": "flow check",
     "prepublish": "npm run flow-check && npm run test && npm run webpack"
   },
