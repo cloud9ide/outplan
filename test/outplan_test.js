@@ -203,12 +203,12 @@ describe("outplan", function() {
     
     it("supports custom salts", function() {
         outplan.create("foo", ["A", "B"]);
-        assert.equal(outplan.expose("foo", 1), "B");
+        assert.equal(outplan.expose("foo", 1), "A");
         assert.equal(outplan.expose("foo", 2), "B");
         assert.equal(outplan.expose("foo", 3), "A");
-        outplan.configure({ salt: "foobar" });
+        outplan.configure({ salt: "different" });
         assert.equal(outplan.expose("foo", 1), "B");
         assert.equal(outplan.expose("foo", 2), "B");
-        assert.equal(outplan.expose("foo", 3), "A");
+        assert.equal(outplan.expose("foo", 3), "B");
     });
 });
