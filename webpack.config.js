@@ -20,6 +20,7 @@ module.exports = [
                 {
                     loader: "babel",
                     test: /outplan\/lib/,
+                    exclude: /planout\/shims/,
                     query: {
                         presets: ["es2015"],
                         plugins: ["add-module-exports", "transform-flow-strip-types"],
@@ -55,6 +56,7 @@ module.exports = [
                 {
                     loader: "babel",
                     test: /outplan\/lib/,
+                    exclude: /planout\/shims/,
                     query: {
                         presets: ["es2015"],
                         plugins: ["add-module-exports", "transform-flow-strip-types"],
